@@ -1,0 +1,384 @@
+{
+    "tarot_major": [
+        {
+            "id": 0,
+            "name": "O Louco",
+            "keywords": [
+                "Início",
+                "Liberdade",
+                "Espontaneidade"
+            ]
+        },
+        {
+            "id": 1,
+            "name": "O Mago",
+            "keywords": [
+                "Manifestação",
+                "Poder",
+                "Ação"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "A Sacerdotisa",
+            "keywords": [
+                "Intuição",
+                "Mistério",
+                "Sabedoria"
+            ]
+        },
+        {
+            "id": 3,
+            "name": "A Imperatriz",
+            "keywords": [
+                "Fertilidade",
+                "Natureza",
+                "Abundância"
+            ]
+        },
+        {
+            "id": 4,
+            "name": "O Imperador",
+            "keywords": [
+                "Autoridade",
+                "Estrutura",
+                "Controle"
+            ]
+        },
+        {
+            "id": 5,
+            "name": "O Hierofante",
+            "keywords": [
+                "Tradição",
+                "Crença",
+                "Conformidade"
+            ]
+        },
+        {
+            "id": 6,
+            "name": "Os Enamorados",
+            "keywords": [
+                "Amor",
+                "Escolha",
+                "Harmonia"
+            ]
+        },
+        {
+            "id": 7,
+            "name": "O Carro",
+            "keywords": [
+                "Vontade",
+                "Vitória",
+                "Determinação"
+            ]
+        },
+        {
+            "id": 8,
+            "name": "A Força",
+            "keywords": [
+                "Coragem",
+                "Compaixão",
+                "Controle"
+            ]
+        },
+        {
+            "id": 9,
+            "name": "O Eremita",
+            "keywords": [
+                "Introspecção",
+                "Guiar",
+                "Solidão"
+            ]
+        },
+        {
+            "id": 10,
+            "name": "A Roda da Fortuna",
+            "keywords": [
+                "Destino",
+                "Mudança",
+                "Ciclos"
+            ]
+        },
+        {
+            "id": 11,
+            "name": "A Justiça",
+            "keywords": [
+                "Verdade",
+                "Lei",
+                "Equilíbrio"
+            ]
+        },
+        {
+            "id": 12,
+            "name": "O Enforcado",
+            "keywords": [
+                "Sacrifício",
+                "Espera",
+                "Perspectiva"
+            ]
+        },
+        {
+            "id": 13,
+            "name": "A Morte",
+            "keywords": [
+                "Fim",
+                "Transformação",
+                "Renovação"
+            ]
+        },
+        {
+            "id": 14,
+            "name": "A Temperança",
+            "keywords": [
+                "Equilíbrio",
+                "Moderação",
+                "Paciência"
+            ]
+        },
+        {
+            "id": 15,
+            "name": "O Diabo",
+            "keywords": [
+                "Vício",
+                "Materialismo",
+                "Desejo"
+            ]
+        },
+        {
+            "id": 16,
+            "name": "A Torre",
+            "keywords": [
+                "Caos",
+                "Revelação",
+                "Mudança Súbita"
+            ]
+        },
+        {
+            "id": 17,
+            "name": "A Estrela",
+            "keywords": [
+                "Esperança",
+                "Fé",
+                "Propósito"
+            ]
+        },
+        {
+            "id": 18,
+            "name": "A Lua",
+            "keywords": [
+                "Ilusão",
+                "Medo",
+                "Subconsciente"
+            ]
+        },
+        {
+            "id": 19,
+            "name": "O Sol",
+            "keywords": [
+                "Alegria",
+                "Sucesso",
+                "Vitalidade"
+            ]
+        },
+        {
+            "id": 20,
+            "name": "O Julgamento",
+            "keywords": [
+                "Renascimento",
+                "Chamado",
+                "Absolvição"
+            ]
+        },
+        {
+            "id": 21,
+            "name": "O Mundo",
+            "keywords": [
+                "Conclusão",
+                "Viagem",
+                "Realização"
+            ]
+        }
+    ],
+    "lenormand": [
+        {
+            "id": 1,
+            "name": "O Cavaleiro",
+            "meaning": "Notícias chegando, movimento."
+        },
+        {
+            "id": 2,
+            "name": "O Trevo",
+            "meaning": "Pequena sorte, rapidez."
+        },
+        {
+            "id": 3,
+            "name": "O Navio",
+            "meaning": "Viagem, distância, estrangeiro."
+        },
+        {
+            "id": 4,
+            "name": "A Casa",
+            "meaning": "Lar, família, segurança."
+        },
+        {
+            "id": 5,
+            "name": "A Árvore",
+            "meaning": "Saúde, raízes, crescimento a longo prazo."
+        },
+        {
+            "id": 6,
+            "name": "As Nuvens",
+            "meaning": "Confusão, incerteza, problemas passageiros."
+        },
+        {
+            "id": 7,
+            "name": "A Cobra",
+            "meaning": "Traição, sedução, complicações."
+        },
+        {
+            "id": 8,
+            "name": "O Caixão",
+            "meaning": "Fim, transformação, doença, perda."
+        },
+        {
+            "id": 9,
+            "name": "O Buquê",
+            "meaning": "Presente, beleza, felicidade."
+        },
+        {
+            "id": 10,
+            "name": "A Foice",
+            "meaning": "Corte, decisão rápida, perigo."
+        },
+        {
+            "id": 11,
+            "name": "O Chicote",
+            "meaning": "Conflito, repetição, paixão física."
+        },
+        {
+            "id": 12,
+            "name": "Os Pássaros",
+            "meaning": "Conversas, fofocas, ansiedade."
+        },
+        {
+            "id": 13,
+            "name": "A Criança",
+            "meaning": "Novo começo, inocência, algo pequeno."
+        },
+        {
+            "id": 14,
+            "name": "A Raposa",
+            "meaning": "Astúcia, trabalho, desconfiança."
+        },
+        {
+            "id": 15,
+            "name": "O Urso",
+            "meaning": "Força, proteção, chefe, mãe."
+        },
+        {
+            "id": 16,
+            "name": "A Estrela",
+            "meaning": "Esperança, fama, clareza."
+        },
+        {
+            "id": 17,
+            "name": "A Cegonha",
+            "meaning": "Mudança, novidade, gravidez."
+        },
+        {
+            "id": 18,
+            "name": "O Cachorro",
+            "meaning": "Amizade, lealdade, apoio."
+        },
+        {
+            "id": 19,
+            "name": "A Torre",
+            "meaning": "Instituição, isolamento, autoridade."
+        },
+        {
+            "id": 20,
+            "name": "O Jardim",
+            "meaning": "Público, social, encontro."
+        },
+        {
+            "id": 21,
+            "name": "A Montanha",
+            "meaning": "Obstáculo, bloqueio, atraso."
+        },
+        {
+            "id": 22,
+            "name": "O Caminho",
+            "meaning": "Escolha, decisão, bifurcação."
+        },
+        {
+            "id": 23,
+            "name": "Os Ratos",
+            "meaning": "Perda, estresse, desgaste."
+        },
+        {
+            "id": 24,
+            "name": "O Coração",
+            "meaning": "Amor, paixão, sentimentos."
+        },
+        {
+            "id": 25,
+            "name": "O Anel",
+            "meaning": "Compromisso, contrato, ciclo."
+        },
+        {
+            "id": 26,
+            "name": "O Livro",
+            "meaning": "Segredo, conhecimento, estudos."
+        },
+        {
+            "id": 27,
+            "name": "A Carta",
+            "meaning": "Mensagem, documento, notícia escrita."
+        },
+        {
+            "id": 28,
+            "name": "O Cigano (Homem)",
+            "meaning": "O consulente (se homem), figura masculina."
+        },
+        {
+            "id": 29,
+            "name": "A Cigana (Mulher)",
+            "meaning": "A consulente (se mulher), figura feminina."
+        },
+        {
+            "id": 30,
+            "name": "Os Lírios",
+            "meaning": "Paz, maturidade, sexualidade, virtude."
+        },
+        {
+            "id": 31,
+            "name": "O Sol",
+            "meaning": "Sucesso, energia, vitória."
+        },
+        {
+            "id": 32,
+            "name": "A Lua",
+            "meaning": "Emoções, reconhecimento, criatividade."
+        },
+        {
+            "id": 33,
+            "name": "A Chave",
+            "meaning": "Solução, destino, abertura."
+        },
+        {
+            "id": 34,
+            "name": "Os Peixes",
+            "meaning": "Dinheiro, abundância, fluxo."
+        },
+        {
+            "id": 35,
+            "name": "A Âncora",
+            "meaning": "Estabilidade, esperança, trabalho fixo."
+        },
+        {
+            "id": 36,
+            "name": "A Cruz",
+            "meaning": "Fardo, fé, destino kármico."
+        }
+    ]
+}

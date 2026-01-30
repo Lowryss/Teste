@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "dev": "npm run dev --prefix apps/web",
+        "emulators": "firebase emulators:start"
+    }
+}

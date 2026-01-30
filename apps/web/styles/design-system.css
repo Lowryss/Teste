@@ -1,0 +1,404 @@
+/**
+ * 🌟 GUIA DO CORAÇÃO - DESIGN SYSTEM
+ * Sistema de design premium com tema místico e mobile-first
+ */
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   CUSTOM PROPERTIES (CSS VARIABLES)
+   ============================================ */
+:root {
+  /* === CORES PRIMÁRIAS === */
+  --primary-hue: 270;
+  --primary-sat: 60%;
+  --primary-light: 70%;
+  --primary-base: 50%;
+  --primary-dark: 30%;
+  
+  --primary: hsl(var(--primary-hue), var(--primary-sat), var(--primary-base));
+  --primary-light: hsl(var(--primary-hue), var(--primary-sat), var(--primary-light));
+  --primary-dark: hsl(var(--primary-hue), var(--primary-sat), var(--primary-dark));
+  --primary-rgb: 128, 51, 204; /* Para rgba */
+  
+  /* === CORES SECUNDÁRIAS === */
+  --secondary: hsl(45, 80%, 60%); /* Dourado místico */
+  --secondary-light: hsl(45, 80%, 75%);
+  --secondary-dark: hsl(45, 80%, 45%);
+  
+  /* === CORES DE ACENTO === */
+  --accent: hsl(220, 40%, 20%); /* Azul noturno */
+  --accent-light: hsl(220, 40%, 35%);
+  
+  /* === BACKGROUNDS === */
+  --background: hsl(240, 20%, 8%); /* Quase preto */
+  --surface: hsl(240, 15%, 12%); /* Card background */
+  --surface-elevated: hsl(240, 15%, 16%);
+  --surface-hover: hsl(240, 15%, 20%);
+  
+  /* === TEXTOS === */
+  --text-primary: hsl(0, 0%, 95%);
+  --text-secondary: hsl(0, 0%, 70%);
+  --text-muted: hsl(0, 0%, 50%);
+  --text-disabled: hsl(0, 0%, 35%);
+  
+  /* === ESTADOS === */
+  --success: hsl(142, 71%, 45%);
+  --success-light: hsl(142, 71%, 60%);
+  --error: hsl(0, 72%, 51%);
+  --error-light: hsl(0, 72%, 66%);
+  --warning: hsl(38, 92%, 50%);
+  --warning-light: hsl(38, 92%, 65%);
+  --info: hsl(199, 89%, 48%);
+  --info-light: hsl(199, 89%, 63%);
+  
+  /* === BORDAS === */
+  --border-color: hsla(0, 0%, 100%, 0.1);
+  --border-color-hover: hsla(0, 0%, 100%, 0.2);
+  --border-color-focus: var(--primary);
+  
+  /* === TIPOGRAFIA === */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Tamanhos responsivos usando clamp */
+  --text-xs: clamp(0.75rem, 2vw, 0.875rem);      /* 12-14px */
+  --text-sm: clamp(0.875rem, 2.5vw, 1rem);       /* 14-16px */
+  --text-base: clamp(1rem, 3vw, 1.125rem);       /* 16-18px */
+  --text-lg: clamp(1.125rem, 3.5vw, 1.25rem);    /* 18-20px */
+  --text-xl: clamp(1.25rem, 4vw, 1.5rem);        /* 20-24px */
+  --text-2xl: clamp(1.5rem, 5vw, 2rem);          /* 24-32px */
+  --text-3xl: clamp(2rem, 6vw, 3rem);            /* 32-48px */
+  --text-4xl: clamp(2.5rem, 7vw, 4rem);          /* 40-64px */
+  
+  /* Line heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.8;
+  
+  /* Font weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* === ESPAÇAMENTO === */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  --space-3xl: 4rem;     /* 64px */
+  --space-4xl: 6rem;     /* 96px */
+  
+  /* === BORDER RADIUS === */
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.5rem;   /* 8px */
+  --radius-lg: 0.75rem;  /* 12px */
+  --radius-xl: 1rem;     /* 16px */
+  --radius-2xl: 1.5rem;  /* 24px */
+  --radius-full: 9999px;
+  
+  /* === SOMBRAS === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  
+  /* Sombras coloridas */
+  --shadow-primary: 0 10px 30px -5px rgba(var(--primary-rgb), 0.4);
+  --shadow-secondary: 0 10px 30px -5px rgba(255, 215, 0, 0.3);
+  
+  /* === GLASSMORPHISM === */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 10px;
+  
+  /* === TRANSIÇÕES === */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+  
+  /* === Z-INDEX === */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* === BREAKPOINTS (para uso em JS) === */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* === LAYOUT === */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  
+  /* === TOUCH TARGETS (Mobile) === */
+  --touch-target-min: 44px; /* iOS/Android guideline */
+  
+  /* === HEADER/FOOTER === */
+  --header-height: 64px;
+  --header-height-mobile: 56px;
+  --footer-height: 200px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* === GLASSMORPHISM === */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.glass-elevated {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-xl);
+}
+
+/* === CONTAINER === */
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+}
+
+/* === GRADIENTES === */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+}
+
+.gradient-cosmic {
+  background: linear-gradient(135deg, 
+    var(--primary) 0%, 
+    var(--accent) 50%, 
+    var(--secondary) 100%
+  );
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === ANIMAÇÕES === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-base);
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-base);
+}
+
+.animate-slide-down {
+  animation: slideDown var(--transition-base);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-base);
+}
+
+/* === TIPOGRAFIA === */
+.text-display {
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+}
+
+.text-body {
+  font-family: var(--font-body);
+  line-height: var(--leading-normal);
+}
+
+/* === VISIBILIDADE === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* === FOCUS VISIBLE === */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-dark);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* === SELECTION === */
+::selection {
+  background: var(--primary);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Hide on mobile */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   ACESSIBILIDADE
+   ============================================ */
+
+/* Reduzir animações para usuários que preferem */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: hsla(0, 0%, 100%, 0.3);
+    --text-secondary: hsl(0, 0%, 85%);
+  }
+}

@@ -1,0 +1,118 @@
+/* ============================================
+   LOGO COMPONENT STYLES
+   ============================================ */
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-md);
+    user-select: none;
+}
+
+/* === VARIANTS === */
+/* Variants are handled by conditional rendering in the component */
+
+/* === SIZES === */
+.logo-sm {
+    gap: var(--space-sm);
+}
+
+.logo-md {
+    gap: var(--space-md);
+}
+
+.logo-lg {
+    gap: var(--space-lg);
+}
+
+/* === ICON === */
+.logo-icon {
+    flex-shrink: 0;
+}
+
+/* Heart animation on hover */
+.logo:hover .logo-heart {
+    animation: heartbeat 1s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.05);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    75% {
+        transform: scale(1.05);
+    }
+}
+
+/* Stars twinkle */
+.logo-star {
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+.logo-star:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.logo-star:nth-child(5) {
+    animation-delay: 0.6s;
+}
+
+.logo-star:nth-child(6) {
+    animation-delay: 0.9s;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* Moon subtle glow */
+.logo-moon {
+    filter: drop-shadow(0 0 4px var(--secondary-light));
+}
+
+/* === TEXT === */
+.logo-text {
+    font-family: var(--font-display);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    white-space: nowrap;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 767px) {
+    .logo-text {
+        font-size: var(--text-base);
+    }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+
+    .logo-heart,
+    .logo-star {
+        animation: none !important;
+    }
+}
