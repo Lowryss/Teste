@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { Sparkles, Star, User, Heart, Moon, Sun, ArrowRight, Plus, Flame, Zap, Infinity as InfinityIcon, Gem } from 'lucide-react'
+import { Sparkles, Star, User, Heart, Moon, Sun, ArrowRight, Plus, Flame, Zap, Infinity as InfinityIcon, Gem, Compass, Crown } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
@@ -66,13 +66,49 @@ export default function DashboardPage() {
             color: 'gold'
         },
         {
+            id: 'astral-map',
+            title: 'Mapa Astral',
+            description: 'Descubra seu Sol, Lua e Ascendente e a dança dos planetas.',
+            icon: Compass,
+            href: '/tools/astral-map',
+            points: 100,
+            color: 'cyan'
+        },
+        {
             id: 'tarot',
-            title: 'Tarot Digital',
-            description: 'As cartas revelam caminhos ocultos do seu inconsciente.',
+            title: 'Tarot e Oráculos',
+            description: 'Tiragens para amor, trabalho e conselhos semanais.',
             icon: Moon,
             href: '/tools/tarot-hub',
             points: 5,
             color: 'purple'
+        },
+        {
+            id: 'numerology-map',
+            title: 'Mapa Numerológico',
+            description: 'A matemática da sua ALMA. Descubra seu destino e missão.',
+            icon: InfinityIcon,
+            href: '/tools/numerology-map',
+            points: 100,
+            color: 'magenta'
+        },
+        {
+            id: 'shamanic-map',
+            title: 'Mapa Xamânico',
+            description: 'Conecte-se com seu Animal de Poder e a medicina da terra.',
+            icon: Flame,
+            href: '/tools/shamanic-map',
+            points: 100,
+            color: 'rose'
+        },
+        {
+            id: 'archetypes',
+            title: 'Arquétipos',
+            description: 'A jornada do herói. Qual mito você está vivendo?',
+            icon: Crown,
+            href: '/tools/archetypes',
+            points: 100,
+            color: 'gold'
         },
         {
             id: 'soulmate',
@@ -90,25 +126,7 @@ export default function DashboardPage() {
             icon: Sparkles,
             href: '/tools/dreams',
             points: 10,
-            color: 'magenta'
-        },
-        {
-            id: 'numerology',
-            title: 'Numerologia do Amor',
-            description: 'Descubra a vibração e compatibilidade dos seus números.',
-            icon: InfinityIcon,
-            href: '/tools/numerology',
-            points: 20,
             color: 'purple'
-        },
-        {
-            id: 'crystals',
-            title: 'Oráculo dos Cristais',
-            description: 'Descubra qual pedra ou cristal você precisa agora.',
-            icon: Gem,
-            href: '/tools/crystals',
-            points: 7,
-            color: 'cyan'
         }
     ]
 
