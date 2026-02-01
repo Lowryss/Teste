@@ -2,3 +2,12 @@ node_modules/
 .env*
 .firebase/
 firebase-debug.log
+
+guia-do-coracao-firebase-adminsdk-fbsvc-8615dcb556.json
+
+*.log
+*.bak
+
+apps/web/.env*
+**/*.log
+**/*.bak

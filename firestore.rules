@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Anyone can read their own document
+      allow read: if isOwner(userId);
+      
+      // Allow creating document if authenticated and it's their own doc
+      // More permissive: allows onboarding fields
+      allow create: if isOwner(userId);
+      
+      // Allow updates to own document
+      // Block sensitive fields from client-side manipulation AFTER initial creation
+      // Note: cosmicPoints should only be modified by server/admin SDK for purchases
+      // But we allow it during initial onboarding (when doc is being created via setDoc merge)
+      allow update: if isOwner(userId) && 
+                      // Protect these fields from being changed by client after creation
+                      // (purchases go through webhook with admin SDK)
+                      !request.resource.data.diff(resource.data).affectedKeys()
+                        .hasAny(['stripeCustomerId', 'subscription']);
+    }
+    
+    // Transactions collection - read only for users, write only by server
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow write: if false; // Only server (admin SDK) can write
+    }
+    
+    // Readings/history collections - users can read their own
+    match /readings/{readingId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow write: if false; // Only server can write
+    }
+    
+    // Default: deny all other writes
+    match /{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+  }
+}

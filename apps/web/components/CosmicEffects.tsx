@@ -62,8 +62,12 @@ export function CosmicBackground() {
 function StarField() {
     const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number }>>([])
 
+    // Optimized for mobile - fewer particles and simpler animations
     useEffect(() => {
-        const newStars = Array.from({ length: 50 }, (_, i) => ({
+        const iS_MOBILE = typeof window !== 'undefined' && window.innerWidth < 768
+        const count = iS_MOBILE ? 15 : 50
+
+        const newStars = Array.from({ length: count }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             y: Math.random() * 100,
@@ -208,11 +212,14 @@ export function GradientButton({
 }
 
 // Floating Particles Effect
-export function FloatingParticles({ count = 30, color = 'magenta' }: { count?: number, color?: string }) {
+export function FloatingParticles({ count = 10, color = 'magenta' }: { count?: number, color?: string }) {
     const [particles, setParticles] = useState<Array<{ id: number; x: number; duration: number; delay: number; size: number }>>([])
 
     useEffect(() => {
-        setParticles(Array.from({ length: count }, (_, i) => ({
+        const iS_MOBILE = typeof window !== 'undefined' && window.innerWidth < 768
+        const safeCount = iS_MOBILE ? Math.min(count, 8) : count
+
+        setParticles(Array.from({ length: safeCount }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             duration: 10 + Math.random() * 20,

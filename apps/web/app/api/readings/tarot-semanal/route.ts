@@ -2,12 +2,12 @@ import { NextResponse } from 'next/server'
 import { adminDb } from '@/lib/firebase-admin'
 import { auth } from '@/lib/firebase-admin'
 import { headers } from 'next/headers'
-import OpenAI from 'openai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { decrementUserPoints } from '@/lib/points'
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || 'mock-key',
-})
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
+const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
 export async function POST(req: Request) {
     try {
@@ -31,7 +31,6 @@ export async function POST(req: Request) {
         }
 
         // 3. Generate Reading Logic
-        // Simulate a spread of 7 Major Arcana cards (Monday to Sunday)
         const MAJOR_ARCANA = [
             'O Louco', 'O Mago', 'A Papisa', 'A Imperatriz', 'O Imperador', 'O Hierofante',
             'Os Enamorados', 'O Carro', 'A Justiça', 'O Eremita', 'A Roda da Fortuna',
@@ -48,31 +47,44 @@ export async function POST(req: Request) {
 
         let readingContent = ''
 
-        if (process.env.OPENAI_API_KEY) {
-            const completion = await openai.chat.completions.create({
-                model: 'gpt-4o',
-                messages: [
-                    {
-                        role: 'system',
-                        content: `Você é um tarólogo místico experiente. Faça uma previsão semanal detalhada baseada nas cartas sorteadas para cada dia.
-                        
-                        Cartas: ${cardsWithDays.join(', ')}.
-                        
-                        Estrutura obrigatória:
-                        - Visão Geral da Semana (1 parágrafo)
-                        - Previsão dia a dia (Segunda a Domingo)
-                        - Conselho Final
-                        
-                        Tom de voz: Místico, inspirador, acolhedor e direto.
-                        Use formatação HTML simples (p, strong, ul, li) para estruturar a resposta.`
-                    }
-                ]
-            })
-            readingContent = completion.choices[0].message.content || 'Erro ao gerar leitura.'
-        } else {
-            readingContent = WEEKLY_CARDS.map((card, i) =>
-                `<p><strong>${days[i]} (${card}):</strong> Energia do dia foca em renovação e autoconhecimento.</p>`
-            ).join('')
+        try {
+            if (!process.env.GEMINI_API_KEY) {
+                throw new Error('GEMINI_API_KEY missing')
+            }
+
+            const prompt = `Você é um tarólogo místico experiente. Faça uma previsão semanal detalhada baseada nas cartas sorteadas para cada dia.
+
+Cartas: ${cardsWithDays.join(', ')}.
+
+Estrutura obrigatória:
+- Visão Geral da Semana (1 parágrafo curto)
+- Previsão dia a dia (Segunda a Domingo). Para cada dia, escreva 2 frases explicando a influência da carta.
+- Conselho Final (1 frase impactante)
+
+Tom de voz: Místico, inspirador, acolhedor e direto.
+Use formatação HTML simples (p, strong, ul, li) para estruturar a resposta. Não use markdown, use HTML tags diretamente (ex: <strong>Segunda:</strong> ...).`
+
+            const result = await model.generateContent(prompt)
+            const response = await result.response
+            readingContent = response.text()
+
+        } catch (aiError) {
+            console.error('AI Generation Error:', aiError)
+            // Fallback melhorado com mensagens aleatórias para não ficar duplicado
+            const fallbackMessages = [
+                "Energia de renovação e crescimento.",
+                "Momento de olhar para dentro e refletir.",
+                "Cuidado com ilusões, busque a verdade.",
+                "Ação e movimento trarão resultados.",
+                "Equilíbrio é a chave para hoje.",
+                "Conexão espiritual fortalecida.",
+                "Dia propício para novos começos."
+            ]
+
+            readingContent = WEEKLY_CARDS.map((card, i) => {
+                const randomMsg = fallbackMessages[Math.floor(Math.random() * fallbackMessages.length)]
+                return `<p><strong>${days[i]} (${card}):</strong> ${randomMsg}</p>`
+            }).join('')
         }
 
         // 4. Save to Database
