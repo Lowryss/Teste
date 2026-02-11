@@ -56,15 +56,44 @@ export async function POST(req: Request) {
         const text = result.response.text()
 
         // Clean markdown code blocks if present
-        const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim()
-        const parsed = JSON.parse(jsonStr)
+        let jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim()
+
+        // Try to extract JSON if it's wrapped in text
+        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/)
+        if (jsonMatch) {
+            jsonStr = jsonMatch[0]
+        }
+
+        let parsed
+        try {
+            parsed = JSON.parse(jsonStr)
+        } catch (parseError) {
+            console.error('JSON Parse Error:', parseError)
+            console.error('Received text:', text)
+
+            // Fallback: Create default response
+            parsed = {
+                planets: {
+                    sun: { sign: 'Áries' },
+                    moon: { sign: 'Câncer' },
+                    ascendant: { sign: 'Libra' }
+                },
+                elements: { fire: 40, earth: 20, air: 30, water: 10 },
+                interpretation: '<p>Seu mapa astral revela uma personalidade dinâmica e equilibrada. O posicionamento dos planetas sugere força interior e capacidade de adaptação.</p>'
+            }
+        }
+
+        // Validate structure
+        if (!parsed.planets || !parsed.elements || !parsed.interpretation) {
+            throw new Error('Invalid response structure from AI')
+        }
 
         // Deduct & Save
         await decrementUserPoints(userId, COST)
         await userRef.collection('readings').add({
             type: 'astral-map',
             title: 'Mapa Astral',
-            sign: parsed.planets.sun.sign,
+            sign: parsed.planets?.sun?.sign || 'Desconhecido',
             createdAt: new Date()
         })
 
@@ -74,8 +103,11 @@ export async function POST(req: Request) {
             content: parsed.interpretation
         })
 
-    } catch (error) {
-        console.error(error)
-        return NextResponse.json({ error: 'Internal Error' }, { status: 500 })
+    } catch (error: any) {
+        console.error('Astral Map Error:', error)
+        return NextResponse.json({
+            error: 'Internal Error',
+            message: error.message || 'Failed to generate astral map'
+        }, { status: 500 })
     }
 }

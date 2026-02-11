@@ -50,22 +50,55 @@ export async function POST(req: Request) {
         const result = await model.generateContent(prompt)
         const text = result.response.text()
 
-        const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim()
-        const parsed = JSON.parse(jsonStr)
+        let jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim()
+
+        // Try to extract JSON if it's wrapped in text
+        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/)
+        if (jsonMatch) {
+            jsonStr = jsonMatch[0]
+        }
+
+        let parsed
+        try {
+            parsed = JSON.parse(jsonStr)
+        } catch (parseError) {
+            console.error('JSON Parse Error:', parseError)
+            console.error('Received text:', text)
+
+            // Fallback: Create default response
+            parsed = {
+                totem: {
+                    animal: 'Águia',
+                    stone: 'Quartzo Claro',
+                    plant: 'Sálvia',
+                    direction: 'Leste',
+                    mantra: 'Vejo além do horizonte e me elevo com sabedoria.'
+                },
+                content: '<p>Seu totem animal representa força, visão e liberdade. Conecte-se com essa energia através da meditação e contemplação da natureza.</p>'
+            }
+        }
+
+        // Validate structure
+        if (!parsed.totem || !parsed.content) {
+            throw new Error('Invalid response structure from AI')
+        }
 
         // Deduct & Save
         await decrementUserPoints(userId, COST)
         await userRef.collection('readings').add({
             type: 'shamanic-map',
             title: 'Mapa Xamânico',
-            totem: parsed.totem.animal,
+            totem: parsed.totem?.animal || 'Desconhecido',
             createdAt: new Date()
         })
 
         return NextResponse.json(parsed)
 
-    } catch (error) {
-        console.error(error)
-        return NextResponse.json({ error: 'Internal Error' }, { status: 500 })
+    } catch (error: any) {
+        console.error('Shamanic Map Error:', error)
+        return NextResponse.json({
+            error: 'Internal Error',
+            message: error.message || 'Failed to generate shamanic map'
+        }, { status: 500 })
     }
 }

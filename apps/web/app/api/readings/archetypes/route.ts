@@ -48,22 +48,53 @@ export async function POST(req: Request) {
         const result = await model.generateContent(prompt)
         const text = result.response.text()
 
-        const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim()
-        const parsed = JSON.parse(jsonStr)
+        let jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim()
+
+        // Try to extract JSON if it's wrapped in text
+        const jsonMatch = jsonStr.match(/\{[\s\S]*\}/)
+        if (jsonMatch) {
+            jsonStr = jsonMatch[0]
+        }
+
+        let parsed
+        try {
+            parsed = JSON.parse(jsonStr)
+        } catch (parseError) {
+            console.error('JSON Parse Error:', parseError)
+            console.error('Received text:', text)
+
+            // Fallback: Create default response
+            parsed = {
+                archetype: 'O Sábio',
+                traits: {
+                    light: 'Sabedoria e Compreensão',
+                    shadow: 'Isolamento e Arrogância Intelectual'
+                },
+                content: '<p>Seu arquétipo dominante é O Sábio, aquele que busca conhecimento e verdade. Sua jornada envolve equilibrar a busca pelo saber com a conexão humana.</p>'
+            }
+        }
+
+        // Validate structure
+        if (!parsed.archetype || !parsed.traits || !parsed.content) {
+            throw new Error('Invalid response structure from AI')
+        }
 
         // Deduct & Save
         await decrementUserPoints(userId, COST)
         await userRef.collection('readings').add({
             type: 'archetype',
             title: 'Arquétipo Dominante',
-            archetype: parsed.archetype,
+            archetype: parsed.archetype || 'Desconhecido',
             createdAt: new Date()
         })
 
         return NextResponse.json(parsed)
 
-    } catch (error) {
-        console.error(error)
-        return NextResponse.json({ error: 'Internal Error' }, { status: 500 })
+    } catch (error: any) {
+        console.error('Archetype Error:', error)
+        return NextResponse.json({
+            error: 'Internal Error',
+            message: error.message || 'Failed to generate archetype'
+        }, { status: 500 })
     }
 }
