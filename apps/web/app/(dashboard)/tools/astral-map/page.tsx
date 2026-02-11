@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
-import { CosmicBackground, GlowCard, GradientText, FloatingParticles, GlowRing } from '@/components/CosmicEffects'
-import { Moon, Sun, Map as MapIcon, Compass, Star } from 'lucide-react'
+import { CosmicBackground, GradientText, FloatingParticles, GlowRing } from '@/components/CosmicEffects'
+import { PremiumGlassCard, HolographicCard, BorderBeam } from '@/components/PremiumGlassEffects'
+import { Moon, Sun, Compass } from 'lucide-react'
 import { useToast } from '@/contexts/ToastContext'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -91,7 +92,7 @@ export default function AstralMapPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         className="max-w-xl mx-auto"
                     >
-                        <GlowCard glowColor="cyan" className="p-8">
+                        <BorderBeam color="cyan" className="p-8">
                             <form onSubmit={handleCalculate} className="space-y-6">
                                 <div className="space-y-2">
                                     <Label className="text-white">Nome Completo</Label>
@@ -135,11 +136,11 @@ export default function AstralMapPage() {
                                     />
                                 </div>
 
-                                <Button type="submit" className="w-full h-14 bg-cyan-600 hover:bg-cyan-500 text-white text-lg font-display tracking-widest mt-4">
-                                    Gerar Mapa Completo <span className="ml-2 text-xs bg-black/20 px-2 py-1 rounded">100 pts</span>
+                                <Button type="submit" className="w-full h-14 bg-gradient-to-r from-cyan-600 via-teal-600 to-blue-600 hover:from-cyan-500 hover:via-teal-500 hover:to-blue-500 text-white text-lg font-display tracking-widest mt-4 shadow-lg shadow-cyan-500/50">
+                                    Gerar Mapa Completo <span className="ml-2 text-xs bg-black/30 px-2 py-1 rounded">100 pts</span>
                                 </Button>
                             </form>
-                        </GlowCard>
+                        </BorderBeam>
                     </motion.div>
                 )}
 
@@ -197,18 +198,18 @@ export default function AstralMapPage() {
                         {/* Detailed Analysis */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <div className="lg:col-span-2">
-                                <GlowCard glowColor="cyan" className="p-8 md:p-12">
+                                <HolographicCard className="p-8 md:p-12">
                                     <h2 className="text-3xl font-display text-white mb-6 border-b border-white/10 pb-4">Interpretação Profunda</h2>
                                     <div
                                         className="prose prose-invert prose-lg max-w-none prose-p:text-cyan-50/80 prose-headings:text-cyan-200"
                                         dangerouslySetInnerHTML={{ __html: result.content }}
                                     />
-                                </GlowCard>
+                                </HolographicCard>
                             </div>
 
                             <div className="lg:col-span-1 space-y-6">
                                 {/* Elements Chart Placeholder */}
-                                <GlowCard glowColor="purple" className="p-6">
+                                <PremiumGlassCard glowColor="purple" intensity="high" className="p-6">
                                     <h3 className="text-white mb-4 font-display">Elementos</h3>
                                     <div className="space-y-4">
                                         <ElementBar element="Fogo" percentage={result.elements.fire} color="bg-red-500" />
@@ -216,7 +217,7 @@ export default function AstralMapPage() {
                                         <ElementBar element="Ar" percentage={result.elements.air} color="bg-yellow-200" />
                                         <ElementBar element="Água" percentage={result.elements.water} color="bg-blue-500" />
                                     </div>
-                                </GlowCard>
+                                </PremiumGlassCard>
 
                                 <Button variant="outline" onClick={() => setStep('input')} className="w-full border-white/20 text-white hover:bg-white/10">
                                     Novo Mapa
@@ -232,7 +233,7 @@ export default function AstralMapPage() {
 
 function PlanetCard({ title, sign, description, icon, color, highlighted }: any) {
     return (
-        <GlowCard glowColor={color} className={`p-6 flex items-start gap-4 ${highlighted ? 'border-cyan-500/50 bg-cyan-900/10' : ''}`}>
+        <PremiumGlassCard glowColor={color} intensity="medium" className={`p-6 flex items-start gap-4 ${highlighted ? 'border-cyan-500/50' : ''}`}>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                 {icon}
             </div>
@@ -241,7 +242,7 @@ function PlanetCard({ title, sign, description, icon, color, highlighted }: any)
                 <p className="text-2xl font-display text-white mb-1">{sign}</p>
                 <p className="text-xs text-white/60">{description}</p>
             </div>
-        </GlowCard>
+        </PremiumGlassCard>
     )
 }
 

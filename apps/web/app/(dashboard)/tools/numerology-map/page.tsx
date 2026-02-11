@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
-import { CosmicBackground, GlowCard, GradientText, FloatingParticles, GlowRing } from '@/components/CosmicEffects'
-import { Star, Sparkles, Fingerprint, Lock, ChevronRight } from 'lucide-react'
+import { CosmicBackground, GradientText, FloatingParticles, GlowRing } from '@/components/CosmicEffects'
+import { PremiumGlassCard, HolographicCard } from '@/components/PremiumGlassEffects'
+import { Sparkles, Fingerprint } from 'lucide-react'
 import { useToast } from '@/contexts/ToastContext'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -89,7 +90,7 @@ export default function NumerologyMapPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="max-w-md mx-auto"
                     >
-                        <GlowCard glowColor="magenta" className="p-8">
+                        <PremiumGlassCard glowColor="magenta" intensity="high" className="p-8">
                             <form onSubmit={handleCalculate} className="space-y-6">
                                 <div className="space-y-2">
                                     <Label className="text-white">Nome Completo</Label>
@@ -112,11 +113,11 @@ export default function NumerologyMapPage() {
                                     />
                                 </div>
 
-                                <Button type="submit" className="w-full h-12 bg-magenta-600 hover:bg-magenta-500 text-white text-lg font-display tracking-widest">
-                                    Calcular Mapa <span className="ml-2 text-xs bg-black/20 px-2 py-1 rounded">100 pts</span>
+                                <Button type="submit" className="w-full h-12 bg-gradient-to-r from-magenta-600 via-pink-600 to-purple-600 hover:from-magenta-500 hover:via-pink-500 hover:to-purple-500 text-white text-lg font-display tracking-widest shadow-lg shadow-magenta-500/50">
+                                    Calcular Mapa <span className="ml-2 text-xs bg-black/30 px-2 py-1 rounded">100 pts</span>
                                 </Button>
                             </form>
-                        </GlowCard>
+                        </PremiumGlassCard>
                     </motion.div>
                 )}
 
@@ -159,7 +160,7 @@ export default function NumerologyMapPage() {
                         </div>
 
                         {/* Analysis Content */}
-                        <GlowCard glowColor="magenta" className="p-8 md:p-12">
+                        <HolographicCard className="p-8 md:p-12">
                             <div className="flex items-center gap-4 mb-8 border-b border-white/10 pb-6">
                                 <Sparkles className="w-8 h-8 text-magenta-400" />
                                 <h2 className="text-3xl font-display text-white">Análise Vibracional</h2>
@@ -175,7 +176,7 @@ export default function NumerologyMapPage() {
                                     Calcular Outro Mapa
                                 </Button>
                             </div>
-                        </GlowCard>
+                        </HolographicCard>
                     </motion.div>
                 )}
             </div>
@@ -185,12 +186,12 @@ export default function NumerologyMapPage() {
 
 function NumberCard({ title, number, description, color, highlighted = false }: { title: string, number: number, description: string, color: 'rose' | 'magenta' | 'purple', highlighted?: boolean }) {
     return (
-        <GlowCard glowColor={color} className={`p-6 text-center h-full flex flex-col items-center ${highlighted ? 'border-magenta-500/50' : ''}`}>
+        <PremiumGlassCard glowColor={color} intensity="medium" className={`p-6 text-center h-full flex flex-col items-center ${highlighted ? 'border-magenta-500/50' : ''}`}>
             <h3 className="text-white/60 uppercase tracking-widest text-sm mb-4 font-bold">{title}</h3>
             <div className={`w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br mb-6 ${highlighted ? 'from-magenta-500 via-purple-500 to-indigo-500 scale-110' : 'from-white/10 to-white/5'}`}>
                 <span className="text-5xl font-display text-white">{number}</span>
             </div>
             <p className="text-white/70 text-sm leading-relaxed">{description}</p>
-        </GlowCard>
+        </PremiumGlassCard>
     )
 }
