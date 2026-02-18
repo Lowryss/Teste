@@ -94,9 +94,10 @@ export async function POST(req: NextRequest) {
 
     } catch (error: any) {
         console.error('Horoscope API Error:', error)
-        if (error.message === 'Insufficient points') {
+        const msg = error.message || 'Unknown error'
+        if (msg === 'Insufficient points') {
             return NextResponse.json({ error: 'Saldo insuficiente' }, { status: 402 })
         }
-        return NextResponse.json({ error: 'Falha ao conectar com os astros' }, { status: 500 })
+        return NextResponse.json({ error: `Erro: ${msg}` }, { status: 500 })
     }
 }
