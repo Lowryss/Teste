@@ -18,11 +18,8 @@ export async function POST(req: NextRequest) {
 
         // 2. Check Rate Limit (1x per day per sign)
         const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-        const readingId = `${userId}_${TOOL_ID}_${today}`
+        const readingId = `${userId}_${TOOL_ID}_${sign}_${today}`
 
-        // Check if reading already exists (optional optimization: check before transaction to save reads)
-        // But for strict consistency we check inside, or we relay on transactions.
-        // Here we'll do a simple check first to avoid point deduction if already done.
         const existingReadingRef = adminDb.collection('readings').doc(readingId)
         const existingReading = await existingReadingRef.get()
 
@@ -33,45 +30,32 @@ export async function POST(req: NextRequest) {
             }, { status: 429 })
         }
 
-        // 3. Atomic Transaction (Deduct Points + Create Reading)
-        const result = await adminDb.runTransaction(async (transaction) => {
-            // User Check
-            const userRef = adminDb.collection('users').doc(userId)
-            const userDoc = await transaction.get(userRef)
+        // 3. Check Points
+        const userRef = adminDb.collection('users').doc(userId)
+        const userDoc = await userRef.get()
 
-            if (!userDoc.exists) throw new Error('User not found')
+        if (!userDoc.exists) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 })
+        }
 
-            const userData = userDoc.data()
-            if ((userData?.cosmicPoints || 0) < COST_POINTS) {
-                throw new Error('Insufficient points')
-            }
+        if ((userDoc.data()?.cosmicPoints || 0) < COST_POINTS) {
+            return NextResponse.json({ error: 'Saldo insuficiente' }, { status: 402 })
+        }
 
-            // Generate AI Content (we do this BEFORE writing to DB to ensure success)
-            // Note: Calling external API inside transaction is bad practice (locks DB).
-            // We should generate first, then write. BUT if generation fails, we shouldn't charge.
-            // So we'll do generation outside transaction? No, user might lose points if we deduct first.
-            // Strategy: Check points -> Generate -> Deduct & Save.
-            // Risk: Race condition on points if user spams.
-            // Better Strategy: Generation is fast enough? No.
-            // Chosen Strategy: Check balance (optimistic) -> Generate -> Transaction(Deduct + Save)
-
-            return { userRef, userData }
-        })
-
-        // 4. Generate AI Response (Outside Transaction)
+        // 4. Generate AI Response
         const prompt = getHoroscopePrompt(sign as ZodiacSign, context)
-        const aiResponse = await generateAIResponse({ prompt })
+        const aiResponse = await generateAIResponse({ prompt, temperature: 0.8 })
 
-        // 5. Final Transaction (Deduct + Save)
+        // 5. Transaction (Deduct + Save)
         await adminDb.runTransaction(async (transaction) => {
-            const userRef = adminDb.collection('users').doc(userId)
             const readingRef = adminDb.collection('readings').doc(readingId)
             const txRef = adminDb.collection('transactions').doc()
 
-            // Re-check balance just in case
-            const userDoc = await transaction.get(userRef)
-            if (!userDoc.exists) throw new Error('User not found')
-            if ((userDoc.data()?.cosmicPoints || 0) < COST_POINTS) throw new Error('Insufficient points')
+            // Re-check balance
+            const tUserDoc = await transaction.get(userRef)
+            if ((tUserDoc.data()?.cosmicPoints || 0) < COST_POINTS) {
+                throw new Error('Insufficient points')
+            }
 
             // Deduct Points
             transaction.update(userRef, {
