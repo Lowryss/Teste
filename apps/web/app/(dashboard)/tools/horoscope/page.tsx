@@ -7,20 +7,21 @@ import { CosmicBackground, GlowCard, GradientText, FloatingParticles } from '@/c
 import { useToast } from '@/contexts/ToastContext'
 import { Button } from '@/components/ui/button'
 import { Moon, Star, Sun, ChevronRight, Zap } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 
 const ZODIAC_SIGNS = [
-    { name: 'Áries', icon: '♈', date: '21/03 - 19/04', element: 'Fogo' },
-    { name: 'Touro', icon: '♉', date: '20/04 - 20/05', element: 'Terra' },
-    { name: 'Gêmeos', icon: '♊', date: '21/05 - 20/06', element: 'Ar' },
-    { name: 'Câncer', icon: '♋', date: '21/06 - 22/07', element: 'Água' },
-    { name: 'Leão', icon: '♌', date: '23/07 - 22/08', element: 'Fogo' },
-    { name: 'Virgem', icon: '♍', date: '23/08 - 22/09', element: 'Terra' },
-    { name: 'Libra', icon: '♎', date: '23/09 - 22/10', element: 'Ar' },
-    { name: 'Escorpião', icon: '♏', date: '23/10 - 21/11', element: 'Água' },
-    { name: 'Sagitário', icon: '♐', date: '22/11 - 21/12', element: 'Fogo' },
-    { name: 'Capricórnio', icon: '♑', date: '22/12 - 19/01', element: 'Terra' },
-    { name: 'Aquário', icon: '♒', date: '20/01 - 18/02', element: 'Ar' },
-    { name: 'Peixes', icon: '♓', date: '19/02 - 20/03', element: 'Água' },
+    { key: 'aries', name: 'Áries', icon: '♈', date: '21/03 - 19/04', element: 'Fogo' },
+    { key: 'taurus', name: 'Touro', icon: '♉', date: '20/04 - 20/05', element: 'Terra' },
+    { key: 'gemini', name: 'Gêmeos', icon: '♊', date: '21/05 - 20/06', element: 'Ar' },
+    { key: 'cancer', name: 'Câncer', icon: '♋', date: '21/06 - 22/07', element: 'Água' },
+    { key: 'leo', name: 'Leão', icon: '♌', date: '23/07 - 22/08', element: 'Fogo' },
+    { key: 'virgo', name: 'Virgem', icon: '♍', date: '23/08 - 22/09', element: 'Terra' },
+    { key: 'libra', name: 'Libra', icon: '♎', date: '23/09 - 22/10', element: 'Ar' },
+    { key: 'scorpio', name: 'Escorpião', icon: '♏', date: '23/10 - 21/11', element: 'Água' },
+    { key: 'sagittarius', name: 'Sagitário', icon: '♐', date: '22/11 - 21/12', element: 'Fogo' },
+    { key: 'capricorn', name: 'Capricórnio', icon: '♑', date: '22/12 - 19/01', element: 'Terra' },
+    { key: 'aquarius', name: 'Aquário', icon: '♒', date: '20/01 - 18/02', element: 'Ar' },
+    { key: 'pisces', name: 'Peixes', icon: '♓', date: '19/02 - 20/03', element: 'Água' },
 ]
 
 export default function HoroscopePage() {
@@ -31,31 +32,40 @@ export default function HoroscopePage() {
     const [period, setPeriod] = useState<'daily' | 'weekly'>('daily')
     const [result, setResult] = useState<any>(null)
 
-    const handleGetHoroscope = async (sign: string) => {
+    const handleGetHoroscope = async (signKey: string, signName: string) => {
         setLoading(true)
-        setSelectedSign(sign)
+        setSelectedSign(signName)
         try {
-            const token = await user?.getIdToken()
-            // Simulação de chamada de API (mock por enquanto)
-            // Na implementação real, conectaria com api/ai/horoscope
-            await new Promise(r => setTimeout(r, 2000))
+            const res = await fetch('/api/ai/horoscope', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user?.uid,
+                    sign: signKey,
+                }),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                if (res.status === 429 && data.cached) {
+                    setResult({
+                        sign: signName,
+                        period,
+                        content: data.cached.content,
+                    })
+                    return
+                }
+                throw new Error(data.error || 'Erro ao consultar os astros')
+            }
 
             setResult({
-                sign,
+                sign: signName,
                 period,
-                content: `
-                    <h3>Energia de ${period === 'daily' ? 'Hoje' : 'da Semana'}</h3>
-                    <p>As estrelas indicam um momento propício para renovação. A posição de Marte favorece iniciativas ousadas, enquanto Vênus pede cautela nas relações afetivas.</p>
-                    <ul>
-                        <li><strong>Amor:</strong> Momento de diálogo e compreensão.</li>
-                        <li><strong>Carreira:</strong> Foque em finalizar pendências.</li>
-                        <li><strong>Saúde:</strong> Beba mais água e descanse.</li>
-                    </ul>
-                    <p><em>Número da sorte: 7 | Cor: Índigo</em></p>
-                `
+                content: data.content,
             })
-        } catch (error) {
-            addToast({ type: 'error', title: 'Erro', message: 'Falha ao consultar os astros.' })
+        } catch (error: any) {
+            addToast({ type: 'error', title: 'Erro', message: error.message || 'Falha ao consultar os astros.' })
         } finally {
             setLoading(false)
         }
@@ -91,7 +101,7 @@ export default function HoroscopePage() {
                                 transition={{ delay: index * 0.05 }}
                             >
                                 <button
-                                    onClick={() => handleGetHoroscope(sign.name)}
+                                    onClick={() => handleGetHoroscope(sign.key, sign.name)}
                                     className="w-full group relative"
                                 >
                                     <GlowCard className="h-full" glowColor={sign.element === 'Fogo' ? 'rose' : sign.element === 'Água' ? 'cyan' : sign.element === 'Ar' ? 'gold' : 'purple'}>
@@ -136,10 +146,9 @@ export default function HoroscopePage() {
                                     </div>
                                 </div>
 
-                                <div
-                                    className="prose prose-invert prose-lg prose-p:text-cyan-50/80 prose-headings:text-cyan-200"
-                                    dangerouslySetInnerHTML={{ __html: result.content }}
-                                />
+                                <div className="prose prose-invert prose-lg prose-p:text-cyan-50/80 prose-headings:text-cyan-200">
+                                    <ReactMarkdown>{result.content}</ReactMarkdown>
+                                </div>
                             </div>
                         </GlowCard>
                     </motion.div>
