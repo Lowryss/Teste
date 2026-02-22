@@ -12,29 +12,34 @@ import { motion } from 'framer-motion'
 import MagneticWrapper from '@/components/MagneticWrapper'
 
 function OnboardingContent() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace('/login')
+    }
+  }, [user, authLoading, router])
+
   const handleStart = async () => {
-    if (!user) return
+    if (!user) {
+      router.replace('/login')
+      return
+    }
     setLoading(true)
     try {
-      // Mark onboarding as complete + Grant 10 Welcome Points
-      // Use setDoc with merge to ensure document exists if it wasn't created yet
       await setDoc(doc(db, 'users', user.uid), {
         onboardingCompleted: true,
         cosmicPoints: 10,
-        totalPointsPurchased: 0, // Initialize tracking
-        email: user.email, // Ensure email is saved
+        totalPointsPurchased: 0,
+        email: user.email,
         displayName: user.displayName
       }, { merge: true })
-      console.log('Document updated successfully');
-      // Force hard redirect to ensure auth state is fresh
       window.location.href = '/dashboard';
     } catch (error) {
       console.error('Onboarding Error:', error);
-      // Fallback redirect
       window.location.href = '/dashboard';
     } finally {
       setLoading(false)
