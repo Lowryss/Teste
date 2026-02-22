@@ -204,7 +204,7 @@ function LoginForm() {
 
                     {/* Footer */}
                     <div className="px-8 py-6 bg-midnight-950/30 border-t border-magenta-50/5 flex flex-col items-center gap-4 text-xs text-magenta-200/40 font-mono">
-                        <Link href="/auth/forgot-password" className="hover:text-magenta-200 transition-colors">
+                        <Link href="/forgot-password" className="hover:text-magenta-200 transition-colors">
                             Esqueceu a senha?
                         </Link>
                         <span>
