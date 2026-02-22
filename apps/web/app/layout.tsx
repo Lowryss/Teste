@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Inter, Playfair_Display, Syne, Space_Mono } from 'next/font/google'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 import './globals.css'
@@ -13,6 +13,20 @@ const inter = Inter({
 const playfair = Playfair_Display({
   variable: '--font-display',
   subsets: ['latin'],
+  display: 'swap',
+})
+
+const syne = Syne({
+  variable: '--font-syne',
+  subsets: ['latin'],
+  weight: ['400', '700', '800'],
+  display: 'swap',
+})
+
+const spaceMono = Space_Mono({
+  variable: '--font-space-mono',
+  subsets: ['latin'],
+  weight: ['400', '700'],
   display: 'swap',
 })
 
@@ -31,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
+    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable} ${syne.variable} ${spaceMono.variable} scroll-smooth`}>
       <body className="antialiased font-body bg-midnight-900 text-magenta-50 min-h-screen">
         <AuthProvider>
           <ToastProvider>

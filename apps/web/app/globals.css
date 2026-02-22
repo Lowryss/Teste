@@ -47,6 +47,19 @@
   --color-gold-500: hsl(36, 100%, 50%);
   /* Approximation for gold */
 
+  /* Aetheris Palette */
+  --color-aetheris-bg: #030308;
+  --color-aetheris-purple: #7000ff;
+  --color-aetheris-purple-light: #9b4dff;
+  --color-aetheris-purple-dark: #4a00b3;
+  --color-aetheris-cyan: #00f2ff;
+  --color-aetheris-cyan-light: #66f7ff;
+  --color-aetheris-cyan-dark: #00b8c2;
+  --color-aetheris-gold: #ffcc33;
+  --color-aetheris-gold-light: #ffe066;
+  --color-aetheris-glass: rgba(10, 8, 30, 0.6);
+  --color-aetheris-glass-border: rgba(255, 255, 255, 0.06);
+
   --font-display: "Playfair Display", "Georgia", serif;
   --font-body: "Inter", "-apple-system", sans-serif;
   --font-mono: "JetBrains Mono", "Courier New", monospace;
@@ -151,6 +164,27 @@
       opacity: 0.5;
       transform: scale(0.8);
     }
+  }
+
+  /* Aetheris Animations */
+  --animate-aetheris-rotate: aetheris-rotate 60s linear infinite;
+  --animate-aetheris-rotate-reverse: aetheris-rotate 40s linear infinite reverse;
+  --animate-aetheris-pulse: aetheris-pulse 4s ease-in-out infinite;
+  --animate-aetheris-drift: aetheris-drift 20s ease-in-out infinite alternate;
+
+  @keyframes aetheris-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes aetheris-pulse {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.05); filter: brightness(1.3); }
+  }
+
+  @keyframes aetheris-drift {
+    from { transform: translate(-20%, -20%) scale(1); }
+    to { transform: translate(20%, 20%) scale(1.2); }
   }
 }
 
@@ -628,4 +662,29 @@ a:hover {
 
 .gradient-border:hover::before {
   opacity: 1;
+}
+
+/* ========================================
+   AETHERIS THEME
+   ======================================== */
+
+.aetheris-glass {
+  background: rgba(10, 8, 30, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.aetheris-glass-card {
+  background: rgba(10, 8, 30, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(112, 0, 255, 0.15);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.aetheris-glass-card:hover {
+  border-color: rgba(0, 242, 255, 0.4);
+  box-shadow: 0 0 30px rgba(0, 242, 255, 0.15), 0 0 60px rgba(112, 0, 255, 0.1);
+  transform: translateY(-4px);
 }
