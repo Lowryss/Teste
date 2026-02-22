@@ -136,6 +136,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const signIn = async (email: string, password: string) => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
+
+            // Aguarda sync do auth state antes de retornar
+            await new Promise<void>((resolve) => {
+                const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
+                    unsubscribe();
+                    if (fbUser) {
+                        setTimeout(resolve, 500);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
         } catch (error: any) {
             console.error('Error signing in:', error);
             throw new Error(getErrorMessage(error.code));
