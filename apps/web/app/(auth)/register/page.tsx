@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, Suspense } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -28,10 +28,17 @@ type RegisterFormValues = z.infer<typeof registerSchema>
 
 function RegisterForm() {
     const router = useRouter()
-    const { signUp, signInWithGoogle } = useAuth()
+    const { user, loading: authLoading, signUp, signInWithGoogle } = useAuth()
     const { addToast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
     const [isGoogleLoading, setIsGoogleLoading] = useState(false)
+
+    // Redireciona quando o user é detectado no context (fonte confiável)
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.push('/onboarding/welcome')
+        }
+    }, [user, authLoading, router])
 
     const methods = useForm<RegisterFormValues>({
         resolver: zodResolver(registerSchema),
@@ -52,7 +59,7 @@ function RegisterForm() {
                 title: 'Bem-vindo ao Universo!',
                 message: 'Cadastro realizado com sucesso. Você ganhou 10 Pontos Cósmicos!',
             })
-            router.push('/onboarding/welcome')
+            // Redirect acontece via useEffect quando user mudar no context
         } catch (error: any) {
             addToast({
                 type: 'error',
@@ -73,7 +80,7 @@ function RegisterForm() {
                 title: 'Bem-vindo!',
                 message: 'Login com Google realizado.',
             })
-            router.push('/onboarding/welcome')
+            // Redirect acontece via useEffect quando user mudar no context
         } catch (error: any) {
             addToast({
                 type: 'error',

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, Suspense } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -36,12 +36,19 @@ export default function LoginPage() {
 function LoginForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const { signIn, signInWithGoogle } = useAuth()
+    const { user, loading: authLoading, signIn, signInWithGoogle } = useAuth()
     const { addToast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
     const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
     const from = searchParams.get('from') || '/dashboard'
+
+    // Redireciona quando o user é detectado no context (fonte confiável)
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.push(from)
+        }
+    }, [user, authLoading, router, from])
 
     const methods = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -60,7 +67,7 @@ function LoginForm() {
                 title: 'Alinhamento Concluído',
                 message: 'Bem-vindo ao Portal Cósmico.',
             })
-            router.push(from)
+            // Redirect acontece via useEffect quando user mudar no context
         } catch (error: any) {
             addToast({
                 type: 'error',
@@ -81,7 +88,7 @@ function LoginForm() {
                 title: 'Sinergia Confirmada',
                 message: 'Conexão estelar estabelecida.',
             })
-            router.push(from)
+            // Redirect acontece via useEffect quando user mudar no context
         } catch (error: any) {
             addToast({
                 type: 'error',
