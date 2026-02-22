@@ -112,7 +112,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 await updateProfile(userCredential.user, {
                     displayName: name,
                 });
-                // Note: O listener do useEffect vai pegar a criação do doc se ele for criado logo em seguida
+
+                // Aguarda o state do context sincronizar antes de retornar,
+                // evitando race condition onde o dashboard redireciona pro login
+                await new Promise<void>((resolve) => {
+                    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
+                        unsubscribe();
+                        if (fbUser) {
+                            // Pequeno delay p/ onSnapshot do Firestore também processar
+                            setTimeout(resolve, 500);
+                        } else {
+                            resolve();
+                        }
+                    });
+                });
             }
         } catch (error: any) {
             console.error('Error signing up:', error);
@@ -133,6 +146,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             const provider = new GoogleAuthProvider();
             await signInWithPopup(auth, provider);
+
+            // Aguarda sync do auth state antes de retornar
+            await new Promise<void>((resolve) => {
+                const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
+                    unsubscribe();
+                    if (fbUser) {
+                        setTimeout(resolve, 500);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
         } catch (error: any) {
             console.error('Error signing in with Google:', error);
             throw new Error(getErrorMessage(error.code));

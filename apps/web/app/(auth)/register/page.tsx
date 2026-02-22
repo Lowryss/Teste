@@ -52,7 +52,7 @@ function RegisterForm() {
                 title: 'Bem-vindo ao Universo!',
                 message: 'Cadastro realizado com sucesso. Você ganhou 10 Pontos Cósmicos!',
             })
-            router.push('/dashboard')
+            router.push('/onboarding/welcome')
         } catch (error: any) {
             addToast({
                 type: 'error',
@@ -73,7 +73,7 @@ function RegisterForm() {
                 title: 'Bem-vindo!',
                 message: 'Login com Google realizado.',
             })
-            router.push('/dashboard')
+            router.push('/onboarding/welcome')
         } catch (error: any) {
             addToast({
                 type: 'error',
