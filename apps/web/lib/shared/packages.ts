@@ -24,7 +24,7 @@ export const PACKAGES = {
         id: 'premium',
         name: 'Pacote Oráculo',
         points: 500,
-        price: 2990, // em centavos (R$ 29,90)
+        price: 12000, // em centavos (R$ 120,00)
         description: 'Para quem busca respostas profundas. +40% Bônus.'
     }
 }
