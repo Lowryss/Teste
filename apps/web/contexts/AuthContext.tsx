@@ -55,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
             if (firebaseUser) {
                 // Usuário logado: Sincronizar com Firestore em Tempo Real
+                setLoading(true);
                 const userRef = doc(db, 'users', firebaseUser.uid);
 
                 unsubscribeFirestore = onSnapshot(userRef, (docSnapshot) => {
@@ -84,6 +85,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     setLoading(false);
                 }, (error) => {
                     console.error("Erro ao sincronizar Firestore:", error);
+                    // Fallback: use Firebase Auth user so login redirect still fires
+                    setUser(firebaseUser as UserProfile);
                     setLoading(false);
                 });
 
